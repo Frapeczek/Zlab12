@@ -1,0 +1,141 @@
+//
+// Created by Pawel Bojarczuk on 23/05/2023.
+//
+
+#include "zlab12.h"
+
+#include <iostream>
+#include <string>
+
+#include <sstream>
+#include <fstream>
+
+using namespace std;
+
+void zlab12::strumienTekstowy() {
+
+    //Formatowanie
+     ostringstream strumien1;
+
+     strumien1 << "Początek tekstu" << endl
+     << "Liczba1: " << 2 << endl
+     << "Liczba2: " << 3.14 << endl;
+
+     cout << strumien1.str() << endl;
+
+     //Parsowanie
+     string liniaDanych = "Liczby: 3.4 4.5 -3.2 aa";
+
+     string opis;
+     double x, y, z;
+     string aa;
+
+     istringstream strumien2(liniaDanych);
+
+     strumien2 >> opis >> x >> y >> z >> aa;
+
+     if(!strumien2.fail())
+         cout << "opis: " << opis << endl
+     << "x=" << x << endl
+     << "y=" << y << endl
+     << "z=" << z << endl
+     << "ostatnia: " << aa << endl << endl;
+     else
+         cout <<"Nie udało się!" << endl << endl;
+
+}
+
+void zlab12::zapisTekstowyDoPliku(string nazwaPliku) {
+
+    ofstream plik;
+
+     cout << "Otwieram plik." << endl;
+     plik.open(nazwaPliku, ios_base::out);
+
+     if(plik.is_open()){
+         cout << "Zapisuje do pliku" << endl;
+         for(int i=1; i<=10; i++)
+             plik << i <<" " << i*i << " "
+         << i*i*i << endl;
+         }
+
+     plik.close();
+
+     cout << "Plik zamknięty" << endl << endl;
+}
+
+void zlab12::odczytPlikuTekstowego(string nazwaPliku) {
+
+    ifstream plik;
+    cout << "Otwieram plik." << endl;
+    plik.open(nazwaPliku, ios_base::in);
+
+    int a, b, c;
+
+    if(plik.is_open()){
+        while(!plik.eof())
+        {
+            plik >> a >> b >> c;
+            if(plik.eof()) break;
+            cout << "a="<<a<<" b="<<b <<" c="<<c <<endl;
+        }
+    }
+
+    plik.close();
+
+}
+
+void zlab12::zapisBinarnyDoPliku(string nazwaPliku) {
+
+    ofstream plik;
+
+     cout << "Otwieram plik." << endl;
+     plik.open(nazwaPliku, ios_base::out|ios_base::binary);
+
+     if(plik.is_open()){
+         cout << "Zapisuje do pliku" << endl;
+         for(int i=1; i<=10; i++)
+            {
+            int k = i;
+            plik.write(reinterpret_cast<char*>(&k),
+                       sizeof (i));
+            k = i*i;
+            plik.write(reinterpret_cast<char*>(&k),
+                       sizeof (i));
+            k = i*i*i;
+            plik.write(reinterpret_cast<char*>(&k),
+                          sizeof (i));
+            }
+        }
+
+     plik.close();
+
+    cout << "Plik zamknięty" << endl;
+}
+
+void zlab12::odczytPlikuBinarnego(string nazwaPliku)
+{
+
+    ifstream plik;
+    cout << "Otwieram plik." << endl;
+    plik.open(nazwaPliku, ios_base::in |ios_base::binary);
+
+    int a, b, c;
+
+    if(plik.is_open())
+    {
+        while(!plik.eof())
+        {
+            plik.read(reinterpret_cast<char*>(&a), sizeof (a));
+            plik.read(reinterpret_cast<char*>(&b),
+                      sizeof (a));
+            plik.read(reinterpret_cast<char*>(&c),
+                         sizeof (a));
+            if(plik.eof()) break;
+        cout << "a="<<a<<" b="<<b<<" c="<<c <<endl;
+        }
+    }
+
+plik.close();
+}
+
